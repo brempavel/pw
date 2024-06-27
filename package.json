@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/brempavel/pw#readme",
   "dependencies": {
-    "phaser": "^3.80.1",
     "prettier": "^3.3.2",
-    "typescript": "^5.5.2"
+    "//": "The TypeScript’s version must be compatible with Vite",
+    "typescript": "^5.2.2"
   }
 }
