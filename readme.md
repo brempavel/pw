@@ -74,7 +74,15 @@
 1. If there is at least one player in each team and the game hasn’t started
    yet, start it.
 
-1. Start a ticker with X (60?) tick/sec.
+1. Start a ticker with X (60?) tick/sec. The following events might happen:
+   - gamer has connected;
+   - gamer has disconnected;
+   - gamer has chosen a username;
+   - gamer has joined the dire team;
+   - gamer has joined the radiant team;
+   - gamer has new move target;
+   - gamer has thrown a hook;
+   - gamer has cancelled throwing of a hook.
 
 ## TODO
 
