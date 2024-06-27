@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/brempavel/pw#readme",
   "dependencies": {
-    "prettier": "^3.3.2"
+    "phaser": "^3.80.1",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.2"
   }
 }
