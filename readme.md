@@ -4,6 +4,8 @@
 
 - [Data Structures](#data-structures)
 - [References](#references)
+- [Algorithms](#algorithms)
+- [Flows](#flows)
 - [TODO](#todo)
 
 ## Data Structures
@@ -42,7 +44,37 @@
 - https://github.com/pxai/phasergames/tree/master/warchat;
 - https://github.com/phaserjs/phaser-by-example/tree/main/mars;
 - https://github.com/phaserjs/phaser-by-example/tree/main/starshipped;
-- https://github.com/phaserjs/phaser-by-example/tree/main/starshipped;
+- https://github.com/bicarbon8/SpaceSim;
+
+## Algorithms
+
+## Flows
+
+1. A gamer is welcomed by a splash screen where he is offered to either connect
+   to a server or to create one.
+
+1. If he chooses to create one, he needs to enter a port.
+
+1. If he chooses to connect to one, he needs to enter an ip address and a port.
+
+1. When a server is just has been either created or joined to, a gamer is
+   prompted to enter a username which needs to be unique to the server. To see
+   them, one can press the tab key: it will show the player list both before
+   joining a game and during it.
+
+1. If the entered username has been already taken, user gets a red error message
+   ‘Please Choose Unique Username’ and the input box becomes red.
+
+1. If the entered username hasn’t been taken, a gamer joins the game.
+
+1. After joining the game, a gamer sees a message ‘Press Tab To Choose a Team’.
+   Hovering over either side would have an overlay with either dire or radiant
+   and write ‘Join the Dire/Radiant Team’.
+
+1. If there is at least one player in each team and the game hasn’t started
+   yet, start it.
+
+1. Start a ticker with X (60?) tick/sec.
 
 ## TODO
 
