@@ -3,9 +3,8 @@
 ## Contents
 
 - [Data Structures](#data-structures)
+- [Gamer Story](#gamer-story)
 - [References](#references)
-- [Algorithms](#algorithms)
-- [Flows](#flows)
 - [TODO](#todo)
 
 ## Data Structures
@@ -36,19 +35,16 @@
 
 ## References
 
-- https://github.com/phaserjs/phaser-by-example/tree/main/runner;
-- https://github.com/phaserjs/phaser-by-example/tree/main/dungeon;
-- https://github.com/pxai/phasergames/tree/master/lucky;
-- https://github.com/pxai/phasergames/tree/master/ufish;
-- https://github.com/phaserjs/phaser-by-example/tree/main/blastemup;
-- https://github.com/pxai/phasergames/tree/master/warchat;
-- https://github.com/phaserjs/phaser-by-example/tree/main/mars;
-- https://github.com/phaserjs/phaser-by-example/tree/main/starshipped;
-- https://github.com/bicarbon8/SpaceSim;
+- [Fast-Paced Multiplayer](https://www.gabrielgambetta.com/client-server-game-architecture.html).
+- [Pathfinding Demystified](https://www.gabrielgambetta.com/generic-search.html).
+- [Real Time Multiplayer in HTML5](http://buildnewgames.com/real-time-multiplayer/).
+- [Source Multiplayer Networking](https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking).
+- [Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization](https://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization).
+- [Gaffer On Games](https://gafferongames.com/).
+- [Más Bandwidth](https://mas-bandwidth.com/).
+- [Unreal Networking Architecture](https://docs.unrealengine.com/udk/Three/NetworkingOverview.html#Peer-to-Peer%20model).
 
-## Algorithms
-
-## Flows
+## Gamer Story
 
 1. A gamer is welcomed by a splash screen where he is offered to either connect
    to a server or to create one.
@@ -85,6 +81,3 @@
    - gamer has cancelled throwing of a hook.
 
 ## TODO
-
-- go through [examples](labs.phaser.io/index.html) together and link here all
-  the relevant examples (https://github.com/phaserjs/examples);
