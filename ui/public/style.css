@@ -1,14 +1,11 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #000000;
-}
-
-#app {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  background-color: #000000;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
