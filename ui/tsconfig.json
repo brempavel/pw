@@ -10,10 +10,15 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "typeRoots": [
-      "../node_modules/@types",
-      "./node_modules/@types"
-    ]
+    "typeRoots": ["../node_modules/@types", "./node_modules/@types"],
+    "paths": {
+      "@ui": ["./src"],
+      "@ui/*": ["./src/*"],
+      "@components": ["./src/components"],
+      "@components/*": ["./src/components/*"],
+      "@utils": ["./src/utils"],
+      "@utils/*": ["./src/utils/*"]
+    }
   },
   "include": ["src"]
 }
