@@ -21,9 +21,9 @@
     "url": "https://github.com/brempavel/pw/issues"
   },
   "homepage": "https://github.com/brempavel/pw#readme",
+  "//": "The TypeScript’s version must be compatible with Vite.",
   "dependencies": {
-    "prettier": "^3.3.2",
-    "//": "The TypeScript’s version must be compatible with Vite",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "prettier": "^3.3.2"
   }
 }

@@ -6,7 +6,7 @@
 - [References](#references)
 - [Notes](#notes)
   - [PixiJS](#pixijs)
-- [Gamer Story](#gamer-story)
+- [Player Story](#player-story)
 - [TODO](#todo)
 
 ## Data Structures
@@ -44,7 +44,6 @@
 - [Real Time Multiplayer in HTML5](http://buildnewgames.com/real-time-multiplayer/).
 - [Source Multiplayer Networking](https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking).
 - [Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization](https://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization).
-- [Gaffer On Games](https://gafferongames.com/).
 - [Unreal Networking Architecture](https://docs.unrealengine.com/udk/Three/NetworkingOverview.html#Peer-to-Peer%20model).
 
 ### Examples
@@ -129,6 +128,7 @@
   hardware).
 
   Spritesheets support configurations like:
+
   ```ts
   const atlasData = {
     frames: {
@@ -165,17 +165,16 @@
 - Order can help, for example sprite / graphic / sprite / graphic is slower
   than sprite / sprite / graphic / graphic.
 
+## Player Story
 
-## Gamer Story
-
-1. A gamer is welcomed by a splash screen where he is offered to either connect
+1. A player is welcomed by a splash screen where he is offered to either connect
    to a server or to create one.
 
 1. If he chooses to create one, he needs to enter a port.
 
 1. If he chooses to connect to one, he needs to enter an ip address and a port.
 
-1. When a server is just has been either created or joined to, a gamer is
+1. When a server is just has been either created or joined to, a player is
    prompted to enter a username which needs to be unique to the server. To see
    them, one can press the tab key: it will show the player list both before
    joining a game and during it.
@@ -183,9 +182,9 @@
 1. If the entered username has been already taken, user gets a red error message
    ‘Please Choose Unique Username’ and the input box becomes red.
 
-1. If the entered username hasn’t been taken, a gamer joins the game.
+1. If the entered username hasn’t been taken, a player joins the game.
 
-1. After joining the game, a gamer sees a message ‘Press Tab To Choose a Team’.
+1. After joining the game, a player sees a message ‘Press Tab To Choose a Team’.
    Hovering over either side would have an overlay with either dire or radiant
    and write ‘Join the Dire/Radiant Team’.
 
@@ -193,13 +192,13 @@
    yet, start it.
 
 1. Start a ticker with X (60?) tick/sec. The following events might happen:
-   - gamer has connected;
-   - gamer has disconnected;
-   - gamer has chosen a username;
-   - gamer has joined the dire team;
-   - gamer has joined the radiant team;
-   - gamer has new move target;
-   - gamer has thrown a hook;
-   - gamer has cancelled throwing of a hook.
+   - player has connected;
+   - player has disconnected;
+   - player has chosen a username;
+   - player has joined the dire team;
+   - player has joined the radiant team;
+   - player has new move target;
+   - player has thrown a hook;
+   - player has cancelled throwing of a hook.
 
 ## TODO
