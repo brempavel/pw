@@ -15,7 +15,7 @@ window.document.body.appendChild(app.canvas)
 
 // These constants are the configurables.
 const WATER_SPRITE_WIDTH_IN_PERCENT = 20
-const WATER_SPRITE_SCALE = 1.1
+const WATER_SPRITE_SCALE = 0.8
 // Needed to compensate for the displacement filter.
 const WATER_SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT = 5
 // Needed to remove artifacts on the screen borders.
@@ -31,8 +31,18 @@ const paddingAdjustedWindowHeightInPercent =
 const getWindowHeight = () =>
   window.innerHeight * paddingAdjustedWindowHeightInPercent
 
+const getWaterSpriteWidth = () =>
+  WATER_SPRITE_SCALE * (window.screen.width / window.innerWidth)
+const getWaterSpriteHeight = () =>
+  WATER_SPRITE_SCALE * 0.3 * (window.screen.height / getWindowHeight())
+
 const GRASS_SPRITE_WIDTH_IN_PERCENT = (100 - WATER_SPRITE_WIDTH_IN_PERCENT) / 2
 const GRASS_SPRITE_SCALE = 0.1
+
+const getGrassSpriteWidth = () =>
+  GRASS_SPRITE_SCALE * (window.screen.width / window.innerWidth)
+const getGrassSpriteHeight = () =>
+  GRASS_SPRITE_SCALE * (window.screen.height / getWindowHeight())
 
 const waterTexture = await Assets.load('assets/water.jpg')
 const waterSprite = new TilingSprite({
@@ -54,8 +64,8 @@ const waterDisplacementFilter = new DisplacementFilter({
   scale: 30,
 })
 waterSprite.filters = [waterDisplacementFilter]
-waterSprite.tileScale.x = WATER_SPRITE_SCALE
-waterSprite.tileScale.y = WATER_SPRITE_SCALE
+waterSprite.tileScale.x = getWaterSpriteWidth()
+waterSprite.tileScale.y = getWaterSpriteHeight()
 waterSprite.x =
   window.innerWidth *
   ((GRASS_SPRITE_WIDTH_IN_PERCENT -
@@ -73,7 +83,7 @@ setWaterSpriteVerticalPaddingDependantsProperties()
 
 app.stage.addChild(waterSprite)
 app.ticker.add((ticker) => {
-  waterSprite.tilePosition.y += ticker.deltaMS / 60
+  waterSprite.tilePosition.y += ticker.deltaMS / 25
 })
 
 const grassTextureLeft = await Assets.load('assets/grass.jpg')
@@ -82,8 +92,8 @@ const grassSpriteLeft = new TilingSprite({
   width: window.innerWidth * (GRASS_SPRITE_WIDTH_IN_PERCENT / 100),
   height: getWindowHeight(),
 })
-grassSpriteLeft.tileScale.x = GRASS_SPRITE_SCALE
-grassSpriteLeft.tileScale.y = GRASS_SPRITE_SCALE
+grassSpriteLeft.tileScale.x = getGrassSpriteWidth()
+grassSpriteLeft.tileScale.y = getGrassSpriteHeight()
 app.stage.addChild(grassSpriteLeft)
 
 const grassTextureRight = await Assets.load('assets/grass.jpg')
@@ -92,8 +102,8 @@ const grassSpriteRight = new TilingSprite({
   width: window.innerWidth * (GRASS_SPRITE_WIDTH_IN_PERCENT / 100),
   height: getWindowHeight(),
 })
-grassSpriteRight.tileScale.x = GRASS_SPRITE_SCALE
-grassSpriteRight.tileScale.y = GRASS_SPRITE_SCALE
+grassSpriteRight.tileScale.x = getGrassSpriteWidth()
+grassSpriteRight.tileScale.y = getGrassSpriteHeight()
 grassSpriteRight.x =
   (window.innerWidth *
     (WATER_SPRITE_WIDTH_IN_PERCENT + GRASS_SPRITE_WIDTH_IN_PERCENT)) /
@@ -106,6 +116,12 @@ window.addEventListener('resize', () => {
     window.innerWidth,
     getWindowHeight(),
   )
+  waterSprite.tileScale.x = getWaterSpriteWidth()
+  waterSprite.tileScale.y = getWaterSpriteHeight()
+  grassSpriteRight.tileScale.x = getGrassSpriteWidth()
+  grassSpriteRight.tileScale.y = getGrassSpriteHeight()
+  grassSpriteLeft.tileScale.x = getGrassSpriteWidth()
+  grassSpriteLeft.tileScale.y = getGrassSpriteHeight()
   setWaterSpriteVerticalPaddingDependantsProperties()
 })
 
