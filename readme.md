@@ -37,14 +37,17 @@
 
 ## References
 
+### Papers
+
 - [Fast-Paced Multiplayer](https://www.gabrielgambetta.com/client-server-game-architecture.html).
 - [Pathfinding Demystified](https://www.gabrielgambetta.com/generic-search.html).
 - [Real Time Multiplayer in HTML5](http://buildnewgames.com/real-time-multiplayer/).
 - [Source Multiplayer Networking](https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking).
 - [Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization](https://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization).
 - [Gaffer On Games](https://gafferongames.com/).
-- [Más Bandwidth](https://mas-bandwidth.com/).
 - [Unreal Networking Architecture](https://docs.unrealengine.com/udk/Three/NetworkingOverview.html#Peer-to-Peer%20model).
+
+### Examples
 
 - [Agar.io clone](https://github.com/owenashurst/agar.io-clone).
 
