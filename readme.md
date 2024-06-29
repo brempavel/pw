@@ -37,6 +37,8 @@
 
 ## References
 
+### Papers
+
 - [Fast-Paced Multiplayer](https://www.gabrielgambetta.com/client-server-game-architecture.html).
 - [Pathfinding Demystified](https://www.gabrielgambetta.com/generic-search.html).
 - [Real Time Multiplayer in HTML5](http://buildnewgames.com/real-time-multiplayer/).
@@ -45,6 +47,7 @@
 - [Gaffer On Games](https://gafferongames.com/).
 - [Unreal Networking Architecture](https://docs.unrealengine.com/udk/Three/NetworkingOverview.html#Peer-to-Peer%20model).
 
+### Examples
 
 - [Agar.io clone](https://github.com/owenashurst/agar.io-clone).
 
