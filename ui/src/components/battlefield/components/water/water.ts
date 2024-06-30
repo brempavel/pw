@@ -9,75 +9,89 @@ import {
 import { App } from '@components'
 
 export class Water {
-  WATER_SPRITE_WIDTH_IN_PERCENT: number = 20
-  WATER_SPRITE_SCALE: number = 0.8
-  // Needed to compensate for the displacement filter.
-  WATER_SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT: number = 5
-  // Needed to remove artifacts on the screen borders.
-  WATER_SPRITE_VERTICAL_PADDING_IN_PERCENT: number = 10
+  readonly SPRITE_WIDTH_IN_PERCENT: number = 20
 
-  paddingAdjustedWindowHeightInPercent: number =
+  readonly grassSpriteWidthInPercent: number =
+    (100 - this.SPRITE_WIDTH_IN_PERCENT) / 2
+
+  // TODO: refactor all the window (and anything that is not related to Water)
+  // into separate classes
+  get screenHeight(): number {
+    return window.screen.height * this.paddingAdjustedWindowHeightInPercent
+  }
+
+  private readonly SPRITE_SCALE: number = 0.8
+  // Needed to compensate for the displacement filter.
+  private readonly SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT: number = 5
+  // Needed to remove artifacts on the screen borders.
+  private readonly SPRITE_VERTICAL_PADDING_IN_PERCENT: number = 10
+
+  private readonly paddingAdjustedWindowHeightInPercent: number =
     // WATER_SPRITE_VERTICAL_PADDING_IN_PERCENT * 2 because we need to adjust for
     // both the top and the bottom.
-    1 + (this.WATER_SPRITE_VERTICAL_PADDING_IN_PERCENT * 2) / 100
-  grassSpriteWidthInPercent: number =
-    (100 - this.WATER_SPRITE_WIDTH_IN_PERCENT) / 2
+    1 + (this.SPRITE_VERTICAL_PADDING_IN_PERCENT * 2) / 100
 
   waterSprite: TilingSprite | null = null
-  waterDisplacementFilter: DisplacementFilter | null = null
+  private waterDisplacementFilter: DisplacementFilter | null = null
 
-  get windowHeight(): number {
-    return window.innerHeight * this.paddingAdjustedWindowHeightInPercent
+  private get spriteWidthScale(): number {
+    return this.SPRITE_SCALE * (window.screen.width / window.innerWidth)
   }
-  private get waterSpriteWidth(): number {
-    return this.WATER_SPRITE_SCALE * (window.screen.width / window.innerWidth)
-  }
-  private get waterSpriteHeight(): number {
-    return (
-      this.WATER_SPRITE_SCALE * 0.3 * (window.screen.height / this.windowHeight)
-    )
+  private get spriteHeightScale(): number {
+    return this.SPRITE_SCALE * 0.3 * (window.screen.height / this.screenHeight)
   }
 
-  private loadAndUseAssets: () => Promise<void> = async (): Promise<void> => {
-    const [water] = await Promise.all([
-      await Assets.load<Texture>('assets/water.jpg'),
-      await Assets.load<Texture>('assets/water-displacement.png'),
-    ])
-    this.waterSprite = new TilingSprite({
-      texture: water,
-      width:
+  private readonly waterSpriteVerticalPadding: number =
+    window.screen.height * (this.SPRITE_VERTICAL_PADDING_IN_PERCENT / 100)
+
+  private readonly loadAndUseAssets: () => Promise<void> =
+    async (): Promise<void> => {
+      const [water] = await Promise.all([
+        await Assets.load<Texture>('assets/water.jpg'),
+        await Assets.load<Texture>('assets/water-displacement.png'),
+      ])
+      this.waterSprite = new TilingSprite({
+        texture: water,
+        width:
+          window.innerWidth *
+          ((this.SPRITE_WIDTH_IN_PERCENT +
+            // WATER_SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT * 2 because we need to
+            // adjust for both the top and the bottom.
+            this.SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT * 2) /
+            100),
+        height: this.screenHeight,
+      })
+
+      this.waterSprite.y = -this.waterSpriteVerticalPadding
+
+      const waterDisplacementSprite = Sprite.from(
+        'assets/water-displacement.png',
+      )
+      waterDisplacementSprite.texture.source.addressMode = 'repeat'
+      this.waterDisplacementFilter = new DisplacementFilter({
+        sprite: waterDisplacementSprite,
+        scale: 30,
+      })
+
+      this.waterDisplacementFilter.padding = this.waterSpriteVerticalPadding
+
+      this.waterSprite.filters = [this.waterDisplacementFilter]
+      this.waterSprite.x =
         window.innerWidth *
-        ((this.WATER_SPRITE_WIDTH_IN_PERCENT +
-          // WATER_SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT * 2 because we need to
-          // adjust for both the top and the bottom.
-          this.WATER_SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT * 2) /
-          100),
-      height: this.windowHeight,
-    })
+        ((this.grassSpriteWidthInPercent -
+          this.SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT) /
+          100)
 
-    const waterDisplacementSprite = Sprite.from('assets/water-displacement.png')
-    waterDisplacementSprite.texture.source.addressMode = 'repeat'
-    this.waterDisplacementFilter = new DisplacementFilter({
-      sprite: waterDisplacementSprite,
-      scale: 30,
-    })
-    this.waterSprite.filters = [this.waterDisplacementFilter]
-    this.waterSprite.x =
-      window.innerWidth *
-      ((this.grassSpriteWidthInPercent -
-        this.WATER_SPRITE_HORIZONTAL_OVERFLOW_IN_PERCENT) /
-        100)
+      this.onResize()
 
-    this.setWaterSpritesRelatedProperties()
+      this.app.stage.addChild(this.waterSprite)
 
-    this.app.stage.addChild(this.waterSprite)
-
-    this.app.ticker.add((ticker) => {
-      if (this.waterSprite) {
-        this.waterSprite.tilePosition.y += ticker.deltaMS / 25
-      }
-    })
-  }
+      this.app.ticker.add((ticker) => {
+        if (this.waterSprite) {
+          this.waterSprite.tilePosition.y += ticker.deltaMS / 25
+        }
+      })
+    }
 
   static instance: Water | null = null
   static getInstance = async (app: App): Promise<Water> => {
@@ -91,19 +105,16 @@ export class Water {
 
   constructor(public app: App) {}
 
-  setWaterSpritesRelatedProperties = (): void => {
-    if (this.waterSprite) {
-      this.waterSprite.tileScale.x = this.waterSpriteWidth
-      this.waterSprite.tileScale.y = this.waterSpriteHeight
-    }
+  readonly onResize = (): void => {
+    this.app.stage.setSize({
+      // Not app.screen.width due to buggy layout when resizing.
+      width: window.innerWidth,
+      height: this.screenHeight,
+    })
 
-    const waterSpriteVerticalPadding =
-      window.innerHeight * (this.WATER_SPRITE_VERTICAL_PADDING_IN_PERCENT / 100)
-    if (this.waterDisplacementFilter) {
-      this.waterDisplacementFilter.padding = waterSpriteVerticalPadding
-    }
     if (this.waterSprite) {
-      this.waterSprite.y = -waterSpriteVerticalPadding
+      this.waterSprite.tileScale.x = this.spriteWidthScale
+      this.waterSprite.tileScale.y = this.spriteHeightScale
     }
   }
 }

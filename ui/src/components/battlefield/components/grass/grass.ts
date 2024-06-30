@@ -3,34 +3,38 @@ import { Assets, TilingSprite } from 'pixi.js'
 import { Water } from '../water'
 
 export class Grass {
-  GRASS_SPRITE_SCALE: number = 0.1
+  sprite: TilingSprite | null = null
 
-  get grassSpriteWidth(): number {
-    return this.GRASS_SPRITE_SCALE * (window.screen.width / window.innerWidth)
+  private readonly SPRITE_SCALE: number = 0.1
+
+  private get spriteWidthScale(): number {
+    return this.SPRITE_SCALE * (window.screen.width / window.innerWidth)
   }
-  get grassSpriteHeight(): number {
+  private get spriteHeightScale(): number {
     return (
-      this.GRASS_SPRITE_SCALE * (window.screen.height / this.water.windowHeight)
+      this.SPRITE_SCALE * (window.screen.height / this.water.app.stage.height)
     )
   }
 
-  grassSprite: TilingSprite | null = null
-  loadAndUseAssets: (x?: number) => Promise<void> = async (
+  private readonly loadAndUseAssets: (x?: number) => Promise<void> = async (
     x?: number,
   ): Promise<void> => {
     const grass = await Assets.load('assets/grass.jpg')
-    this.grassSprite = new TilingSprite({
-      texture: grass,
-      width: window.innerWidth * (this.water.grassSpriteWidthInPercent / 100),
-
-      height: this.water.windowHeight,
-    })
-    this.grassSprite.tileScale.x = this.grassSpriteWidth
-    this.grassSprite.tileScale.y = this.grassSpriteHeight
-    if (x) {
-      this.grassSprite.x = x
+    if (this.water.waterSprite) {
+      this.sprite = new TilingSprite({
+        texture: grass,
+        width: window.innerWidth * (this.water.grassSpriteWidthInPercent / 100),
+        height: this.water.screenHeight,
+      })
     }
-    this.water.app.stage.addChild(this.grassSprite)
+
+    this.onResize()
+
+    if (this.sprite) {
+      if (x) this.sprite.x = x
+
+      this.water.app.stage.addChild(this.sprite)
+    }
   }
 
   static getInstance = async (water: Water, x?: number): Promise<Grass> => {
@@ -40,4 +44,11 @@ export class Grass {
   }
 
   constructor(private water: Water) {}
+
+  readonly onResize = (): void => {
+    if (this.sprite) {
+      this.sprite.tileScale.x = this.spriteWidthScale
+      this.sprite.tileScale.y = this.spriteHeightScale
+    }
+  }
 }
