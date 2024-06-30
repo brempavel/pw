@@ -4,7 +4,7 @@
   "description": "pw — pudge wars",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Tests are for pussies.\""
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/brempavel/pw#readme",
   "//": "The TypeScript’s version must be compatible with Vite.",
-  "dependencies": {
+  "devDependencies": {
     "typescript": "^5.2.2",
     "prettier": "^3.3.2"
   }

@@ -1,0 +1,5 @@
+export const WATER_WIDTH_IN_PERCENT = 20
+export const GRASS_TILE_SCALE = 0.15
+export const WATER_TEXTURE_URL = 'assets/fire.jpg'
+export const WATER_DISPLACEMENT_FILTER_SCALE = 50
+export const WATER_SPRITE_TILE_POSITION_SPEED_DENOMINATOR = 20
