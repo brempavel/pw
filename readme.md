@@ -4,9 +4,12 @@
 
 - [Data Structures](#data-structures)
 - [References](#references)
+  - Papers(#papers)
+  - Examples(#examples)
 - [Notes](#notes)
   - [PixiJS](#pixijs)
 - [Player Story](#player-story)
+- [Work Log](#work-log)
 - [TODO](#todo)
 
 ## Data Structures
@@ -200,5 +203,35 @@
    - player has new move target;
    - player has thrown a hook;
    - player has cancelled throwing of a hook.
+
+## Work Log
+
+- 22 Jun 24, george, the idea was born
+
+- 23–28 Jun 24, george, research. Phaser has been considered and tossed due to
+  lack of desire to dig and figure out how to port it (at least partially) to
+  the server. A Go implementation of the server is in our plans, to replace the
+  current, Node.js, one which has been choosen just for a prototype: converting
+  something you haven’t written to another language is at least a bit harder
+  than converting something you have created. And we want to implement our own
+  server using
+  [WebTransport datagrams](https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API),
+  own reconcilation and interpolation (and prediction on client). First we are
+  building client figuring out which events we would like to have coming from
+  server, then building a simple WebSockets server for POC. Then we will figure
+  something out from there.
+
+- 28 Jun 24, george, Pavel, research. Played with Phaser, Pavel implemented a
+  simple version of the game and created good enough references of Pudge to
+  make animation sprites out of it. George researched more papers and came to
+  conclusion it would be easier to use PixiJS, a part of Phaser responsible
+  for rendering. Actually, its old and a bit dated version. We can’t use its
+  physics engine, and everything else it provides is easy to re-implement.
+  George have started the project’s battle field and went to bed at 5am.
+
+- 29 Jun 24, george, Pavel, implementation. George finished (not really) the
+  resising auto-fitting logic. Pavel bootstrapped the logic for controlling
+  Pudge. PixiJS seems like the right bet: bigger community, better docs, more
+  hands-on and **useful** examples with up-to-date PixiJS’ code.
 
 ## TODO
