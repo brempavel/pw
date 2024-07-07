@@ -1,12 +1,12 @@
 import { Assets, Container, Texture, TilingSprite } from 'pixi.js'
 
 import { Component } from '@types'
-import { GRASS_TILE_SCALE, WATER_WIDTH_IN_PERCENT } from '@constants'
+import { GROUND_TILE_SCALE, RIVER_WIDTH_IN_PERCENT } from '@constants'
 import { debounce } from '@utils'
 
 export class Ground extends Component {
   private get waterWidth(): number {
-    return (this.sceneManager.width * WATER_WIDTH_IN_PERCENT) / 100
+    return (this.sceneManager.width * RIVER_WIDTH_IN_PERCENT) / 100
   }
 
   private get width(): number {
@@ -23,7 +23,7 @@ export class Ground extends Component {
     this.sprite = new TilingSprite({
       texture: await Assets.load<Texture>('assets/grass.jpg'),
     })
-    this.sprite.tileScale = GRASS_TILE_SCALE
+    this.sprite.tileScale = GROUND_TILE_SCALE
     this.isRightSide = isRightSide
     this.onResize()
 

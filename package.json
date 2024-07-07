@@ -4,7 +4,8 @@
   "description": "pw — pudge wars",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Tests are for pussies.\""
+    "test": "echo \"Tests are for pussies.\"",
+    "postinstall": "npm --prefix ui i"
   },
   "repository": {
     "type": "git",

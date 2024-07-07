@@ -21,7 +21,9 @@
       "@types": ["src/types/"],
       "@types/*": ["src/types/*"],
       "@constants": ["src/constants/"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@scene-manager": ["src/scene-manager/"],
+      "@scene-manager/*": ["src/scene-manager/*"]
     }
   },
   "include": ["src"]

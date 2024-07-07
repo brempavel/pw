@@ -14,6 +14,8 @@ export default defineConfig({
       '@types/*': path.resolve('src/types/*'),
       '@constants': path.resolve('src/constants/'),
       '@constants/*': path.resolve('src/constants/*'),
+      '@scene-manager': path.resolve('src/scene-manager/'),
+      '@scene-manager/*': path.resolve('src/scene-manager/*'),
     },
   },
 })

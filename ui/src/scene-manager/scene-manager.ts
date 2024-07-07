@@ -41,9 +41,10 @@ export class SceneManager {
     }
 
     const container = new Container()
-    this.app!.stage.addChild(container)
 
     this.scene = await scene.build(container)
+
+    this.app!.stage.addChild(container)
   }
 
   async deleteScene() {

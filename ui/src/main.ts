@@ -1,4 +1,5 @@
-import { SceneManager, Match } from '@components'
+import { SceneManager } from '@scene-manager'
+import { Match } from '@components'
 
 const sceneManager = await new SceneManager(window).build()
 await sceneManager.setScene(new Match(sceneManager))
