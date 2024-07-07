@@ -1,12 +1,13 @@
 import { Assets, Container, Texture, TilingSprite } from 'pixi.js'
 
 import { Component } from '@types'
-import { GROUND_TILE_SCALE, RIVER_WIDTH_IN_PERCENT } from '@constants'
 import { debounce } from '@utils'
+
+import { GROUND, RIVER } from '../../constants'
 
 export class Ground extends Component {
   private get waterWidth(): number {
-    return (this.sceneManager.width * RIVER_WIDTH_IN_PERCENT) / 100
+    return (this.sceneManager.width * RIVER.WIDTH_IN_PERCENT) / 100
   }
 
   private get width(): number {
@@ -16,14 +17,17 @@ export class Ground extends Component {
   sprite: TilingSprite | null = null
   isRightSide: boolean = false
 
-  async build(
-    container: Container,
-    { isRightSide }: { [key: string]: any } = { isRightSide: false },
-  ): Promise<Ground> {
+  async init({
+    container,
+    isRightSide = false,
+  }: {
+    container: Container
+    isRightSide?: boolean
+  }): Promise<this> {
     this.sprite = new TilingSprite({
-      texture: await Assets.load<Texture>('assets/grass.jpg'),
+      texture: await Assets.load<Texture>(GROUND.TEXTURE_URL),
     })
-    this.sprite.tileScale = GROUND_TILE_SCALE
+    this.sprite.tileScale = GROUND.TILE_SCALE
     this.isRightSide = isRightSide
     this.onResize()
 
