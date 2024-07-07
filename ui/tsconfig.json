@@ -10,14 +10,18 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "typeRoots": ["../node_modules/@types", "./node_modules/@types"],
+		"baseUrl": ".",
     "paths": {
-      "@ui": ["./src"],
-      "@ui/*": ["./src/*"],
-      "@components": ["./src/components"],
-      "@components/*": ["./src/components/*"],
-      "@utils": ["./src/utils"],
-      "@utils/*": ["./src/utils/*"]
+      "@ui": ["src/"],
+      "@ui/*": ["src/*"],
+      "@components": ["src/components/"],
+      "@components/*": ["src/components/*"],
+      "@utils": ["src/utils/"],
+      "@utils/*": ["src/utils/*"],
+      "@types": ["src/types/"],
+      "@types/*": ["src/types/*"],
+      "@constants": ["src/constants/"],
+      "@constants/*": ["src/constants/*"]
     }
   },
   "include": ["src"]
