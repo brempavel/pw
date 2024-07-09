@@ -1,7 +1,7 @@
 import { Container, Application, WebGPURenderer, Ticker } from 'pixi.js'
 
 import { Component } from '@types'
-import { isDestroy, isTick } from '@utils'
+import { getDoesntExistError, isDestroy, isTick } from '@utils'
 
 export class SceneManager {
   private scene: Component | undefined
@@ -26,11 +26,12 @@ export class SceneManager {
 
   async init(): Promise<SceneManager> {
     this.app = new Application<WebGPURenderer>()
-    // globalThis.__PIXI_APP__ = this.app
     await this.app.init({ resizeTo: this.window })
     this.window.document.body.appendChild(this.app.canvas)
 
     this.app.ticker.add(this.onTick)
+
+    if (import.meta.env.DEV) globalThis.__PIXI_APP__ = this.app
 
     return this
   }
@@ -41,12 +42,15 @@ export class SceneManager {
     } else {
       await this.init()
     }
+    if (!this.app) {
+      throw getDoesntExistError`${this.constructor.name} ${this.setScene.name} this.app`
+    }
 
     const container = new Container()
 
     this.scene = await scene.init({ container })
 
-    this.app!.stage.addChild(container)
+    this.app.stage.addChild(container)
   }
 
   async deleteScene() {
@@ -58,7 +62,10 @@ export class SceneManager {
   }
 
   async destroy(): Promise<void> {
-    this.app?.destroy(true, true)
+    if (!this.app) {
+      throw getDoesntExistError`${this.constructor.name} ${this.destroy.name} this.app`
+    }
+    this.app.destroy(true, true)
     this.eventListeners.forEach((listener) =>
       this.window.removeEventListener(...listener),
     )
