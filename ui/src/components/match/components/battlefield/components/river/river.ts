@@ -8,23 +8,18 @@ import {
   Ticker,
 } from 'pixi.js'
 
-import { Component } from '@types'
+import { Component, Tick } from '@types'
 import { debounce } from '@utils'
-import {
-  RIVER_DISPLACEMENT_URL,
-  RIVER_DISPLACEMENT_FILTER_SCALE,
-  RIVER_SPRITE_TILE_POSITION_SPEED_DENOMINATOR,
-  RIVER_TEXTURE_URL,
-  RIVER_WIDTH_IN_PERCENT,
-} from '@constants'
+import { NOOP_ON_TICK } from '@constants'
 
-const DISPLACEMENT_FILTER_COMPENSATION_IN_PERCENT = 30
+import { RIVER } from '../../constants'
 
-export class River extends Component {
+export class River extends Component implements Tick {
   private get width(): number {
     return (
       this.sceneManager.width *
-      ((RIVER_WIDTH_IN_PERCENT + DISPLACEMENT_FILTER_COMPENSATION_IN_PERCENT) /
+      ((RIVER.WIDTH_IN_PERCENT +
+        RIVER.DISPLACEMENT_FILTER_COMPENSATION_IN_PERCENT) /
         100)
     )
   }
@@ -36,20 +31,20 @@ export class River extends Component {
   private sprite: TilingSprite | null = null
   private displacementFilter: DisplacementFilter | null = null
 
-  async build(container: Container): Promise<River> {
+  async init({ container }: { container: Container }): Promise<this> {
     const [water] = await Promise.all([
-      await Assets.load<Texture>(RIVER_TEXTURE_URL),
-      await Assets.load<Texture>(RIVER_DISPLACEMENT_URL),
+      await Assets.load<Texture>(RIVER.TEXTURE_URL),
+      await Assets.load<Texture>(RIVER.DISPLACEMENT_URL),
     ])
 
     this.sprite = new TilingSprite({ texture: water })
     this.onResize()
 
-    const displacementSprite = Sprite.from('assets/river-displacement.png')
+    const displacementSprite = Sprite.from(RIVER.DISPLACEMENT_URL)
     displacementSprite.texture.source.addressMode = 'repeat'
     this.displacementFilter = new DisplacementFilter({
       sprite: displacementSprite,
-      scale: RIVER_DISPLACEMENT_FILTER_SCALE,
+      scale: RIVER.DISPLACEMENT_FILTER_SCALE,
     })
 
     this.sprite.filters = [this.displacementFilter]
@@ -59,7 +54,7 @@ export class River extends Component {
     this.onTick = (ticker: Ticker) => {
       if (this.sprite) {
         this.sprite.tilePosition.y +=
-          ticker.deltaMS / RIVER_SPRITE_TILE_POSITION_SPEED_DENOMINATOR
+          ticker.deltaMS / RIVER.SPRITE_TILE_POSITION_SPEED_DENOMINATOR
       }
     }
 
@@ -69,6 +64,8 @@ export class River extends Component {
 
     return this
   }
+
+  onTick = NOOP_ON_TICK
 
   private onResize = () => {
     this.sprite!.width = this.width

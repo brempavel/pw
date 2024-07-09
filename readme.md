@@ -169,6 +169,10 @@
 
 - Wrap any group in a container.
 
+- Don’t change `scale` property of a container just because you think you need
+  it. Always first try changing just `width` & `height`, and `x` & `y`
+  optionally, then work from there.
+
 ## Player Story
 
 1. A player is welcomed by a splash screen where he is offered to either connect
