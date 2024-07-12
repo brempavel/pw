@@ -1,12 +1,12 @@
 import { Container } from 'pixi.js'
 
-import { Component, Tick } from '@types'
+import { Component, InitParams, Tick } from '@types'
 import { NOOP_ON_TICK } from '@constants'
 
 import { Ground, River } from './components'
 
 export class Battlefield extends Component implements Tick {
-  async init({ container }: { container: Container }): Promise<this> {
+  override async init({ container }: InitParams): Promise<this> {
     const battlefield = new Container()
     container.addChild(battlefield)
 

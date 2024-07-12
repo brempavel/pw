@@ -10,10 +10,11 @@ export interface Destroy {
   destroy: () => Promise<void>
 }
 
+export type InitParams<T = {}> = { container: Container } & T
+
 export abstract class Component {
   constructor(protected sceneManager: SceneManager) {}
-  abstract init(args: {
-    container: Container
-    [key: string]: any
-  }): Promise<this>
+  abstract init<T>(params: InitParams<T>): Promise<this>
 }
+
+export type Radians = number

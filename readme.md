@@ -261,6 +261,13 @@
   `Grass` to `Ground`). Also i have hot-change game config in plans, so anyone
   can customize looks of the game if she wants.
 
+- 7–9 Jul. Some code refactorings, slowly introducing the player to the game.
+  Figuring out the best way of encoding the player’s direction, movements,
+  actions, etc.
+
+- 10–12 Jul. Came up with the player turning algorithm so it can turn towards
+  the target automatically; implemented a basic movement algorithm.
+
 ## TODO
 
 - connect the server with the ui:
@@ -270,7 +277,7 @@
      - make Pudge animated when he walks;
      - make it possible to go into any direction if not possible yet;
      - make Pudge respect world boundaries;
-     - make it possible to through a simple hook;
+     - make it possible to throw a simple hook;
      - refine hooking until it’s good enough;
      - figure out what events we need.
   1. the server:
@@ -281,4 +288,9 @@
   1. the client:
      - create a connection mechanism via console;
      - create an API client.
-- add game sound, kills voice-over, better & more sprites
+- add game sound, kills voice-over, better & more sprites:
+  1. Pudge/player:
+     - create a 3D model based off the current sprite;
+       - try to use it in game to make it possible to turn into any direction:
+         - if it didn’t work, create a sprite off screenshots of the model doing
+           different actions.

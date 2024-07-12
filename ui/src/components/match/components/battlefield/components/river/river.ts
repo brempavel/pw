@@ -3,13 +3,12 @@ import {
   TilingSprite,
   Texture,
   Sprite,
-  Container,
   DisplacementFilter,
   Ticker,
 } from 'pixi.js'
 
-import { Component, Tick } from '@types'
-import { debounce } from '@utils'
+import { Component, Tick, InitParams } from '@types'
+import { debounce, getDoesntExistError } from '@utils'
 import { NOOP_ON_TICK } from '@constants'
 
 import { RIVER } from '../../constants'
@@ -31,7 +30,7 @@ export class River extends Component implements Tick {
   private sprite: TilingSprite | null = null
   private displacementFilter: DisplacementFilter | null = null
 
-  async init({ container }: { container: Container }): Promise<this> {
+  override async init({ container }: InitParams): Promise<this> {
     const [water] = await Promise.all([
       await Assets.load<Texture>(RIVER.TEXTURE_URL),
       await Assets.load<Texture>(RIVER.DISPLACEMENT_URL),
@@ -68,8 +67,11 @@ export class River extends Component implements Tick {
   onTick = NOOP_ON_TICK
 
   private onResize = () => {
-    this.sprite!.width = this.width
-    this.sprite!.height = this.sceneManager.height
-    this.sprite!.x = this.x
+    if (!this.sprite) {
+      throw getDoesntExistError`${this.constructor.name} ${this.onResize.name} this.sprite`
+    }
+    this.sprite.width = this.width
+    this.sprite.height = this.sceneManager.height
+    this.sprite.x = this.x
   }
 }

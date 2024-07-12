@@ -1,7 +1,7 @@
-import { Assets, Container, Texture, TilingSprite } from 'pixi.js'
+import { Assets, Texture, TilingSprite } from 'pixi.js'
 
-import { Component } from '@types'
-import { debounce } from '@utils'
+import { Component, InitParams } from '@types'
+import { debounce, getDoesntExistError } from '@utils'
 
 import { GROUND, RIVER } from '../../constants'
 
@@ -17,13 +17,12 @@ export class Ground extends Component {
   sprite: TilingSprite | null = null
   isRightSide: boolean = false
 
-  async init({
+  override async init({
     container,
     isRightSide = false,
-  }: {
-    container: Container
+  }: InitParams<{
     isRightSide?: boolean
-  }): Promise<this> {
+  }>): Promise<this> {
     this.sprite = new TilingSprite({
       texture: await Assets.load<Texture>(GROUND.TEXTURE_URL),
     })
@@ -41,8 +40,11 @@ export class Ground extends Component {
   }
 
   private onResize = () => {
-    this.sprite!.width = this.width
-    this.sprite!.height = this.sceneManager.height
-    if (this.isRightSide) this.sprite!.x = this.width + this.waterWidth
+    if (!this.sprite) {
+      throw getDoesntExistError`${this.constructor.name} ${this.onResize.name} this.sprite`
+    }
+    this.sprite.width = this.width
+    this.sprite.height = this.sceneManager.height
+    if (this.isRightSide) this.sprite.x = this.width + this.waterWidth
   }
 }
