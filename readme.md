@@ -268,6 +268,15 @@
 - 10–12 Jul. Came up with the player turning algorithm so it can turn towards
   the target automatically; implemented a basic movement algorithm.
 
+- 13 Jul. Forgot to use delta time for player movement \*facepalm\*. Now it
+  seems to have roughly the same speed in all directions. Also checked out the
+  [papers](#papers) for an inspiration and opened the article on the unreal
+  engine networking architecture. They have
+  ```
+  Position += Velocity * DeltaTime
+  ```
+  as one of the few code examples/snippets on the page.
+
 ## TODO
 
 - connect the server with the ui:
@@ -289,7 +298,7 @@
      - create a connection mechanism via console;
      - create an API client.
 - add game sound, kills voice-over, better & more sprites:
-  1. Pudge/player:
+  1. Player:
      - create a 3D model based off the current sprite;
        - try to use it in game to make it possible to turn into any direction:
          - if it didn’t work, create a sprite off screenshots of the model doing

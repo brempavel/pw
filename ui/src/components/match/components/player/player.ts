@@ -5,8 +5,8 @@ import { NOOP_ON_TICK } from '@constants'
 import { debounce, getDoesntExistError } from '@utils'
 
 const NO_TARGET = new Point(-1, -1)
-const PUDGE_TURNING_SPEED = 0.15
-const PUDGE_MOVEMENT_SPEED = 4
+const PLAYER_TURNING_SPEED = 0.18
+const PLAYER_MOVEMENT_SPEED = 3.5
 
 export class Player extends Component implements Tick {
   sprite: Sprite | null = null
@@ -42,24 +42,32 @@ export class Player extends Component implements Tick {
         let deltaAngle = this.targetAngle - this.sprite.rotation
         while (Math.PI < deltaAngle) deltaAngle -= 2 * Math.PI
         while (-Math.PI > deltaAngle) deltaAngle += 2 * Math.PI
-        const rotation = ticker.deltaTime * PUDGE_TURNING_SPEED
-        if (Math.abs(deltaAngle) <= rotation) {
+        const rotation = ticker.deltaTime * PLAYER_TURNING_SPEED
+        if (rotation >= Math.abs(deltaAngle)) {
           this.sprite.rotation = this.targetAngle
-        } else if (deltaAngle > 0) this.sprite.rotation += rotation
-        else if (deltaAngle < 0) this.sprite.rotation -= rotation
+        } else if (0 < deltaAngle) this.sprite.rotation += rotation
+        else if (0 > deltaAngle) this.sprite.rotation -= rotation
         return
       }
 
-      const dx = this.target.x - this.sprite.x
-      const dy = this.target.y - this.sprite.y
-      if (Math.hypot(dx, dy) > PUDGE_MOVEMENT_SPEED) {
-        let angle = Math.atan2(dy, dx)
-        this.sprite.x += Math.cos(angle) * PUDGE_MOVEMENT_SPEED
-        this.sprite.y += Math.sin(angle) * PUDGE_MOVEMENT_SPEED
-      } else {
+      const speed = ticker.deltaTime * PLAYER_MOVEMENT_SPEED
+      // π must be subtracted from this.targetAngle to get atan2(y, x) from
+      // atan2(-x, y).
+      const angle = this.targetAngle - Math.PI
+      const xMovement = Math.cos(angle) * speed
+      const yMovement = Math.sin(angle) * speed
+      if (
+        Math.hypot(
+          this.target.x - this.sprite.x,
+          this.target.y - this.sprite.y,
+        ) <= speed
+      ) {
         this.sprite.x = this.target.x
         this.sprite.y = this.target.y
         this.target = new Point(-1, -1)
+      } else {
+        this.sprite.x += xMovement
+        this.sprite.y += yMovement
       }
     }
 

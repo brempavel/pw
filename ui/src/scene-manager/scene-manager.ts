@@ -12,7 +12,6 @@ export class SceneManager {
   get width(): number {
     return this.window.innerWidth
   }
-
   get height(): number {
     return this.window.innerHeight
   }

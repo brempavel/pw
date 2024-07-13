@@ -18,7 +18,7 @@ export class Battlefield extends Component implements Tick {
     await new Ground(this.sceneManager).init({ container: battlefield })
     await new Ground(this.sceneManager).init({
       container: battlefield,
-      isRightSide: true,
+      isOnRightSide: true,
     })
 
     return this

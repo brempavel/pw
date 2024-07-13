@@ -37,7 +37,6 @@ export class River extends Component implements Tick {
     ])
 
     this.sprite = new TilingSprite({ texture: water })
-    this.onResize()
 
     const displacementSprite = Sprite.from(RIVER.DISPLACEMENT_URL)
     displacementSprite.texture.source.addressMode = 'repeat'
@@ -57,6 +56,7 @@ export class River extends Component implements Tick {
       }
     }
 
+    this.onResize()
     const debouncedOnResize = debounce(this.onResize, 0)
     this.sceneManager.addEventListener('resize', this.onResize)
     this.sceneManager.addEventListener('resize', debouncedOnResize)
