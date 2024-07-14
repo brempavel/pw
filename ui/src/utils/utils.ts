@@ -1,4 +1,4 @@
-import { Component, Destroy, Tick } from '@types'
+import { Component, Destroy, Radians, Tick } from '@types'
 import {
   NOOP_DESTROY,
   NOOP_DESTROY_ERROR_MESSAGE,
@@ -70,4 +70,15 @@ export const getDoesntExistError = (
     throw new Error(`${errorSuffix} missing.`)
   }
   return new Error(`${component}: ${method}: ${missing.trim()} doesn’t exist.`)
+}
+
+export const normalizeAngle = (angle: Radians): Radians => {
+  const isAngleTooBig = () => Math.PI < angle
+  const isAngleTooLittle = () => -Math.PI > angle
+  while (isAngleTooBig()) angle -= 2 * Math.PI
+  while (isAngleTooLittle()) angle += 2 * Math.PI
+  if (isAngleTooBig() || isAngleTooLittle()) {
+    throw new Error('normalizeAngle: angle couldn’t be normalized.')
+  }
+  return angle
 }

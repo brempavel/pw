@@ -25,12 +25,16 @@ export class SceneManager {
 
   async init(): Promise<SceneManager> {
     this.app = new Application<WebGPURenderer>()
-    await this.app.init({ resizeTo: this.window })
+    if (import.meta.env.DEV) globalThis.__PIXI_APP__ = this.app
+    await this.app.init({
+      resizeTo: this.window,
+      resolution: this.window.devicePixelRatio,
+      autoDensity: true,
+      antialias: true,
+    })
     this.window.document.body.appendChild(this.app.canvas)
 
     this.app.ticker.add(this.onTick)
-
-    if (import.meta.env.DEV) globalThis.__PIXI_APP__ = this.app
 
     return this
   }
@@ -71,6 +75,10 @@ export class SceneManager {
   }
 
   private onTick = (ticker: Ticker) => {
+    if (!this.app) {
+      throw getDoesntExistError`${this.constructor.name} ${this.onTick.name} this.app`
+    }
+    this.app.renderer.resolution = this.window.devicePixelRatio
     if (isTick(this.scene)) this.scene.onTick(ticker)
   }
 }
