@@ -15,23 +15,23 @@ export class Ground extends Component {
   }
 
   sprite: TilingSprite | null = null
-  isRightSide: boolean = false
+  isOnRightSide: boolean = false
 
   override async init({
     container,
-    isRightSide = false,
+    isOnRightSide = false,
   }: InitParams<{
-    isRightSide?: boolean
+    isOnRightSide?: boolean
   }>): Promise<this> {
     this.sprite = new TilingSprite({
       texture: await Assets.load<Texture>(GROUND.TEXTURE_URL),
     })
     this.sprite.tileScale = GROUND.TILE_SCALE
-    this.isRightSide = isRightSide
-    this.onResize()
+    this.isOnRightSide = isOnRightSide
 
     container.addChild(this.sprite)
 
+    this.onResize()
     const debouncedOnResize = debounce(this.onResize, 0)
     this.sceneManager.addEventListener('resize', this.onResize)
     this.sceneManager.addEventListener('resize', debouncedOnResize)
@@ -45,6 +45,6 @@ export class Ground extends Component {
     }
     this.sprite.width = this.width
     this.sprite.height = this.sceneManager.height
-    if (this.isRightSide) this.sprite.x = this.width + this.waterWidth
+    if (this.isOnRightSide) this.sprite.x = this.width + this.waterWidth
   }
 }

@@ -2,11 +2,11 @@ import { Assets, Point, Sprite, Texture } from 'pixi.js'
 
 import { Component, InitParams, Radians, Tick } from '@types'
 import { NOOP_ON_TICK } from '@constants'
-import { debounce, getDoesntExistError } from '@utils'
+import { debounce, getDoesntExistError, normalizeAngle } from '@utils'
 
 const NO_TARGET = new Point(-1, -1)
-const PUDGE_TURNING_SPEED = 0.15
-const PUDGE_MOVEMENT_SPEED = 4
+const PLAYER_TURNING_SPEED = 0.18
+const PLAYER_MOVEMENT_SPEED = 3.5
 
 export class Player extends Component implements Tick {
   sprite: Sprite | null = null
@@ -31,35 +31,49 @@ export class Player extends Component implements Tick {
     this.onTick = (ticker) => {
       if (!this.sprite || this.target.equals(NO_TARGET)) return
 
-      while (Math.PI < this.sprite.rotation) {
-        this.sprite.rotation -= 2 * Math.PI
-      }
-      while (-Math.PI > this.sprite.rotation) {
-        this.sprite.rotation += 2 * Math.PI
-      }
+      this.sprite.rotation = normalizeAngle(this.sprite.rotation)
 
       if (this.targetAngle !== this.sprite.rotation) {
-        let deltaAngle = this.targetAngle - this.sprite.rotation
-        while (Math.PI < deltaAngle) deltaAngle -= 2 * Math.PI
-        while (-Math.PI > deltaAngle) deltaAngle += 2 * Math.PI
-        const rotation = ticker.deltaTime * PUDGE_TURNING_SPEED
-        if (Math.abs(deltaAngle) <= rotation) {
+        const rotation = ticker.deltaTime * PLAYER_TURNING_SPEED
+        if (Math.abs(this.deltaAngle) <= rotation) {
           this.sprite.rotation = this.targetAngle
-        } else if (deltaAngle > 0) this.sprite.rotation += rotation
-        else if (deltaAngle < 0) this.sprite.rotation -= rotation
+        } else if (0 < this.deltaAngle) this.sprite.rotation += rotation
+        else if (0 > this.deltaAngle) this.sprite.rotation -= rotation
+        else {
+          if (Math.abs(this.deltaAngle) <= rotation) {
+            throw new Error(
+              `${this.constructor.name}: ${this.onTick.name}:` +
+                ' the error below (in the code) wasn’t updated and may be' +
+                ' irrelevant.',
+            )
+          }
+          throw new Error(
+            `${this.constructor.name}: ${this.onTick.name}:` +
+              ' Math.abs(this.deltaAngle) > rotation, but' +
+              ' this.deltaAngle === 0.',
+          )
+        }
         return
       }
 
-      const dx = this.target.x - this.sprite.x
-      const dy = this.target.y - this.sprite.y
-      if (Math.hypot(dx, dy) > PUDGE_MOVEMENT_SPEED) {
-        let angle = Math.atan2(dy, dx)
-        this.sprite.x += Math.cos(angle) * PUDGE_MOVEMENT_SPEED
-        this.sprite.y += Math.sin(angle) * PUDGE_MOVEMENT_SPEED
-      } else {
+      const movement = ticker.deltaTime * PLAYER_MOVEMENT_SPEED
+      // π must be subtracted from this.targetAngle to get atan2(y, x) from
+      // atan2(-x, y).
+      const angle = this.targetAngle - Math.PI
+      const xMovement = Math.cos(angle) * movement
+      const yMovement = Math.sin(angle) * movement
+      if (
+        Math.hypot(
+          this.target.x - this.sprite.x,
+          this.target.y - this.sprite.y,
+        ) <= movement
+      ) {
         this.sprite.x = this.target.x
         this.sprite.y = this.target.y
         this.target = new Point(-1, -1)
+      } else {
+        this.sprite.x += xMovement
+        this.sprite.y += yMovement
       }
     }
 
@@ -75,17 +89,25 @@ export class Player extends Component implements Tick {
   onTick = NOOP_ON_TICK
 
   private get targetAngle(): Radians {
-    if (!this.sprite || this.target.equals(NO_TARGET)) return 0
-    const x = this.target.x - this.sprite.x
-    const y = this.target.y - this.sprite.y
-    let angle =
+    if (!this.sprite) {
+      throw getDoesntExistError`${this.constructor.name} ${this.onResize.name} this.sprite`
+    }
+    if (this.target.equals(NO_TARGET)) return this.sprite.rotation
+    return normalizeAngle(
       // -x, y is the west-clockwise convention which is used by PixiJS.
-      Math.atan2(-x, y) -
-      // Subtract 90° to turn the player correctly so he’s facing the target.
-      Math.PI / 2
-    while (angle > Math.PI) angle -= 2 * Math.PI
-    while (angle < -Math.PI) angle += 2 * Math.PI
-    return angle
+      Math.atan2(
+        -(this.target.x - this.sprite.x),
+        this.target.y - this.sprite.y,
+      ) -
+        // Subtract 90° to turn the player correctly so he’s facing the target.
+        Math.PI / 2,
+    )
+  }
+  private get deltaAngle(): Radians {
+    if (!this.sprite) {
+      throw getDoesntExistError`${this.constructor.name} ${'deltaAngle'} this.sprite`
+    }
+    return normalizeAngle(this.targetAngle - this.sprite.rotation)
   }
 
   private onResize = () => {
