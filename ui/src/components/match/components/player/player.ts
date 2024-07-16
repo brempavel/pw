@@ -40,13 +40,6 @@ export class Player extends Component implements Tick {
         } else if (0 < this.deltaAngle) this.sprite.rotation += rotation
         else if (0 > this.deltaAngle) this.sprite.rotation -= rotation
         else {
-          if (Math.abs(this.deltaAngle) <= rotation) {
-            throw new Error(
-              `${this.constructor.name}: ${this.onTick.name}:` +
-                ' the error below (in the code) wasn’t updated and may be' +
-                ' irrelevant.',
-            )
-          }
           throw new Error(
             `${this.constructor.name}: ${this.onTick.name}:` +
               ' Math.abs(this.deltaAngle) > rotation, but' +
